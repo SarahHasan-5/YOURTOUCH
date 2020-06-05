@@ -1,0 +1,16 @@
+body {font-family: Arial, Helvetica, sans-serif; background-color:#f5f5dc";}
+*{
+  box-sizing: border-box;
+}
+.form-group #oi{
+	background:#e84c3d;	
+color:#fff;
+padding:8px 40px;
+font-size:20px;
+margin:30px 0px;
+}
+.form-group #oi:hover{
+	background: #ff1802;
+    color: #fff;
+	cursor:pointer;
+}

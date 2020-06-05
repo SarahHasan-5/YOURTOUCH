@@ -1,0 +1,19 @@
+body{
+	background-color:#f3f3f3;
+}
+.form-group input[type="submit"]{
+	background:#e84c3d;	
+border:none;
+color:#fff;
+padding:8px 40px;
+font-size:20px;
+margin:30px 0px;
+}
+.form-group input[type="submit"]:hover{
+	background: #ff1802;
+    color: #fff;
+	cursor:pointer;
+}
+.navbar-brand span{
+	color:red;
+}
