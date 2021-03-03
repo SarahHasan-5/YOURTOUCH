@@ -1,46 +1,38 @@
 <?php
 session_start();
 
-if($_POST['submit']) {
+if(isset($_POST['btn'])) {
 $username = strip_tags($_POST['email']);
 $password = strip_tags($_POST['password']);
 
-$db = mysqli_connect("localhost","root","","dbweb2") or die ("Failed to connect");
+include 'connect.php';
 
 $sql   = "SELECT id,email,password,username FROM infouser where email = '$username' AND password ='$password'";
-$query = mysqli_query($db, $sql);
-if($query) 
+if( mysqli_query($conn, $sql)) 
 {
 
-$row        = mysqli_fetch_row($query);
+$row        = mysqli_fetch_row( mysqli_query($conn, $sql));
 $userId     = $row[0];
 $dbUserName = $row[1];
 $dbPassword = $row[2];
-
 }
 if($username == $dbUserName && $password == $dbPassword) {
-     $_SESSION['iduser'] = $userId;
-	   $_SESSION['user']   = $dbUserName;
-	 echo '<script> window.open("index.php","_self");</script>'; 
+    $_SESSION['iduser'] = $userId;
+	  $_SESSION['user']   = $dbUserName;
+	  echo '<script> window.open("index.php","_self");</script>'; 
 }
 else
 {
-echo "<b><i>Incorrect login</i></b>";
+    echo "<script>alert('The password you’ve entered is incorrect');</script>"; 
 }
-
 }
-
-
-
-
-
-
-
-
-
-
-
 ?>
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,7 +47,7 @@ echo "<b><i>Incorrect login</i></b>";
 
 
 	
-    <title>Your touch </title>
+    <title>YOUR TOUCH</title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -65,7 +57,6 @@ body {font-family: Arial, Helvetica, sans-serif; background-image :url("lololo.j
 * {
   box-sizing: border-box;
 }
-
 .inpu {
   display: flex;
   width: 100%;
@@ -89,8 +80,6 @@ color:#9a7e6c;
   min-width: 50px;
   text-align: center;
 }
-
-
 .btn {
   background-color: #c19e87;
   color: white;
@@ -117,9 +106,6 @@ color:#9a7e6c;
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="product.php">SERVICES</a>
-            </li>
 			<li class="nav-item">
               <a class="nav-link" href="index1.php"><i class="fas fa-user"></i> SIGN UP</a>
             </li>
@@ -139,12 +125,11 @@ color:#9a7e6c;
     <i class="fa fa-envelope icon"></i>
     <input type="text"  placeholder="Please enter your email" name="email" class="form-control" style="height:50px; width:100%" required>
   </div>
-  
   <div class="inpu">
     <i class="fa fa-key icon"></i>
-    <input type="password" placeholder="Please enter your Password" name="password" class="form-control"  required>
+    <input type="password" placeholder="Please enter your Password" name="password" class="form-control" style="height:50px; width:100%"  required>
   </div>
-    <input class="btn" type="submit" name="submit" value="LOG IN" ><br><br>
+    <input class="btn" type="submit" name="btn" value="LOG IN" ><br><br>
 	<div class="text-center">
 	<b><p> Dont have a account? </b><a href="Regester.php" style="color:gray">REGISTER HERE </a></p>
     </div>
@@ -155,7 +140,7 @@ color:#9a7e6c;
 <br><br><br><br><br>
 <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
       </div>
       <!-- /.container -->
     </footer>

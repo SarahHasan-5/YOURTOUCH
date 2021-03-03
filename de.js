@@ -8,7 +8,7 @@
         $name=$_POST["Name"];
 		$postal=$_POST["postal"];
 		$pay=$_POST["city1"];
-$conn=new mysqli("localhost","root","11111111","dbweb2");
+$conn=new mysqli("localhost","root","","dbweb2");
 if($conn->connect_error){
 die("not connected".$conn->connect_error);
 }else{

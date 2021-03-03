@@ -1,33 +1,35 @@
 <?php
 session_start();
-$catId=$_GET["catid"];
-$item_Id=$_POST["id"];
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn->connect_error){
-	die("not connect".$conn->connect_error);
-}else{
-	//echo "connect";
-	echo "<br>";
+
+if(isset($_GET['catid']))
+{ 
+  $catId = $_GET['catid'];
+  //echo $catId . "<br>";
+}
+
+$item_Id = '';
+if (isset($_POST["id"])){
+  $item_Id = $_POST["id"];
+  //echo $item_Id . "<br>";
+}
+
+include 'connect.php';
 	$sql="SELECT * FROM product WHERE storeid='$item_Id'";
-	$result=$conn->query($sql);
-	if($result->num_rows>0){
+	if($result = $conn->query($sql)){
 		//echo "data selected";
 		$product="";
 		while( $row=$result->fetch_assoc()){
 			$product=$product."
 			<div class='col-lg-4 col-md-6 mb-4'>
 			<form action='viewpro.php' method='post'>
-              <div class='card h-100'>
-                <img src='".$row["image"]."' alt='' style='width:340px;height:300px;'>
-                <div class='card-body'>
-                  <p><h4 class='card-title'>".$row["Name"]."</p>
-           
-                  </h4> 
+              <div class='card h-100' style='width:395px;height:600px;'>
+                <img src='".$row["image"]."' alt='' style='width:393px;height:300px;'>
+                <div class='card-body'> 
                   <p class='card-text'>".$row["productdescription"]." </p>
                 </div>
 				<div>
 				<input type='text' name='id' value='".$row["id"]."' hidden>
-                <input type='submit' value='View'  class='btn btn-success'  >
+                <input type='submit' value='View'  class='a'  >
 				</div>
                 <div class='card-footer'>
 		      <div class='star-rating'>
@@ -67,9 +69,6 @@ if($conn->connect_error){
 	}else{
 		//echo "no data";
 	}
-		
-
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,6 +100,7 @@ if($conn->connect_error){
 <style>
 body{
 	background-color:#666666;	
+  margin-top: 50px;
 }
 #d{
 	 padding: 0px 50px;
@@ -196,7 +196,30 @@ body{
 .star-rating > label:hover,
 .star-rating > label:hover ~ label,
 .star-rating > input[type="radio"]:checked ~ label
-{color: #f2b600}
+{
+  color: #f2b600
+}
+input[value="View"]
+{
+  margin-bottom:20px;
+}
+.a{
+  text-decoration:none;
+  color: #fff;
+  background: #e84c3d;
+  padding:5px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  border:none;
+  cursor: pointer;
+  width:20%;
+  border-radius: 10px
+ }
+ .a:hover{
+    background: #ff1802;
+    color: #fff;
+    text-decoration:none;
+ }
 </style>
 </head>
   <body>
@@ -212,7 +235,7 @@ body{
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
 			<li class="nav-item">
-              <a class="nav-link" href="login.php"><i class="fas fa-user"></i> SIGN UP</a>
+              <a class="nav-link" href="index1.php"><i class="fas fa-user"></i> SIGN UP</a>
             </li>
 			<li class="nav-item">
               <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
@@ -228,7 +251,7 @@ body{
 </div> 
 	      <div class="container-fluid text-center" id="d">
           <div class="row">
-           <?
+           <?php
            echo $product;
            ?> 
           </div>
@@ -237,7 +260,7 @@ body{
 <br><br><br><br><br>
 <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
       </div>
       <!-- /.container -->
     </footer>

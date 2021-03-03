@@ -1,27 +1,4 @@
-<?php
-session_start();
-$name=$_POST["Name"];
-$phone=$_POST["Phone"];
-$email=$_POST["Email"];
-$passwo=$_POST["Password"];
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn -> connect_error){
-	die(" Not Connected  ".$conn -> connect_error);
-}else{	
-	echo "All Good < Connected "."<br>";
-	$sql = "INSERT INTO infouser(username,phone,email,password) VALUES('$name','$phone','$email','$passwo')";
-	
-	if($conn->query($sql)== TRUE){
-	    echo " Some Data inserted";
-		//$output= '<script> window.open("index1.php","_self");</script>'; 
-		//echo $output;
-		}else{
-		echo " No Data ";
-	         }
-		$conn->close;
-	}	
 
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,7 +14,7 @@ if($conn -> connect_error){
 
 
 	
-    <title>Your Touch </title>
+    <title>YOUR TOUCH</title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -94,11 +71,8 @@ body {font-family: Arial, Helvetica, sans-serif; background-image :url("lololo.j
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="product.php">SERVICES</a>
-            </li>
 			<li class="nav-item">
-              <a class="nav-link" href="login.php"><i class="fas fa-user"></i> SIGN UP</a>
+              <a class="nav-link" href="index1.php"><i class="fas fa-user"></i> SIGN UP</a>
             </li>
 			<li class="nav-item">
               <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
@@ -110,7 +84,7 @@ body {font-family: Arial, Helvetica, sans-serif; background-image :url("lololo.j
 
 <br> <br>
 <div class="container-fluid">
-<form action="Regester.php" style="max-width:500px;margin:auto" method="post">
+<form action="Regester2.php" style="max-width:500px;margin:auto" method="post">
   <h2 class="text-center">Join us</h2>
   <div class="inpu">
     <i class="fa fa-user icon"></i>
@@ -131,16 +105,13 @@ body {font-family: Arial, Helvetica, sans-serif; background-image :url("lololo.j
     <i class="fa fa-key icon"></i>
     <input class="form-control" type="password" placeholder="Password" name="Password" style="height:50px; width:100%" required>
   </div>
-    <input class="btn" type="submit" value="Register" >
-	<div class="text-center">
-	<p><b><a href="index1.php" style="color:#cdc0b0">Sign in </a> </b></p>
-    </div>
+    <input class="btn" type="submit" value="Register" onclick="myFunction()">
 </form>
 </div>
 <br><br><br><br><br>
 <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
       </div>
       <!-- /.container -->
     </footer>

@@ -1,78 +1,80 @@
 <?php
 session_start();
-$catId=$_GET["catid"];
-$item_Id=$_POST["id"];
-$stoId=$_GET["storeid"];
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn->connect_error){
-	die("not connect".$conn->connect_error);
-}else{
-	echo "connect";
-	echo "<br>";
-	$sql="SELECT * FROM store WHERE catid='$catId'";
-	$result=$conn->query($sql);
-	if($result->num_rows>0){
-		echo "data selected";
-		$product="";
-		while( $row=$result->fetch_assoc()){
-			$product=$product."
-			<div class='col-lg-4 col-md-6 mb-4'>
-			<form action='product.php?storeid='$item_Id'' method='post'>
-			
-              <div class='card h-100'>
-                <img src='".$row["piclnk"]."' alt='' style='width:395px; height:300px;'>
-                <div class='card-body'>
-                  <h4 class='card-title'>
-                    ".$row["storename"]."
-                  </h4> 
-                  <p class='card-text'>".$row["storedescription"]." </p>
-				  <h5>".$row["Email"]."</h5>
-                </div>
-				<div>
-				<input type='text' name='id' value='".$row["id"]."' hidden >
-                <input type='submit' value='View'  class='btn btn-success'  >
-				</div>
-                <div class='card-footer'>
-		      <div class='star-rating'>
+if(isset($_GET['catid']))
+{ 
+  $catId = $_GET['catid'];
+  //echo $catId . "<br>";
+}
+
+$item_Id = '';
+if (isset($_POST["id"])){
+  $item_Id = $_POST["id"];
+  echo $item_Id . "<br>";
+}
+
+if (isset($_GET["storeid"])){
+  $stoId = $_GET["storeid"];
+  echo $stoId . "<br>";
+}
+
+include 'connect.php';
+$sql="SELECT * FROM store WHERE catid='$catId'";
+if($result = $conn->query($sql)){
+		//echo "data selected";
+    $product="";
+		while( $row = $result->fetch_assoc()){
+			$product=$product.
+                "<div class='col-lg-6 col-md-6 col-sm-6 mb-4'>
+                  <form action='product.php?storeid='$item_Id'' method='post'>
+                    <div class='card h-100'>
+                      <img src='".$row["piclnk"]."' alt='' style='width:628px; height:330px;'>
+                      <div class='card-body'>
+                        <h4 class='card-title'> ".$row["storename"]."</h4> 
+                        <p class='card-text'>".$row["storedescription"]." </p>
+                        <h5>".$row["Email"]."</h5>
+                      </div>
+                      <div>
+                        <input type='text' name='id' value='".$row["id"]."' class='btn btn-success' hidden>
+                        <input type='submit' value='View' class='a'>
+                      </div>
+                      <div class='card-footer'>
+                        <div class='star-rating'>
+                          <input id='star-5x' type='radio' name='rating' value='star-5' />
+                          <label for='star-5x' title='5 stars'>
+                            <i class='fa fa-star'></i>
+                          </label>
+
+                          <input id='star-4x' type='radio' name='rating' value='star-4' />
+                          <label for='star-4x' title='4 stars'>
+                            <i class='fa fa-star'></i>
+                          </label>
+
+                          <input id='star-3x' type='radio' name='rating' value='star-3' checked />
+                          <label for='star-3x' title='3 stars'>
+                            <i class='fa fa-star'></i>
+                          </label>
+
+                          <input id='star-2x' type='radio' name='rating' value='star-2' />
+                          <label for='star-2x' title='2 stars'>
+                            <i class='fa fa-star'></i>
+                          </label>
+
+                          <input id='star-1x' type='radio' name='rating' value='star-1' />
+                          <label for='star-1x' title='1 star'>
+                            <i class='fa fa-star'></i>
+                          </label>
     
-    <input id='star-5x' type='radio' name='rating' value='star-5' />
-    <label for='star-5x' title='5 stars'>
-        <i class='fa fa-star'></i>
-    </label>
-
-    <input id='star-4x' type='radio' name='rating' value='star-4' />
-    <label for='star-4x' title='4 stars'>
-        <i class='fa fa-star'></i>
-    </label>
-
-    <input id='star-3x' type='radio' name='rating' value='star-3' checked />
-    <label for='star-3x' title='3 stars'>
-        <i class='fa fa-star'></i>
-    </label>
-
-    <input id='star-2x' type='radio' name='rating' value='star-2' />
-    <label for='star-2x' title='2 stars'>
-        <i class='fa fa-star'></i>
-    </label>
-
-    <input id='star-1x' type='radio' name='rating' value='star-1' />
-    <label for='star-1x' title='1 star'>
-        <i class='fa fa-star'></i>
-    </label>
-    
-</div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
                 </div>
-              </div>
-			 </form>
-            </div>";
-		}
-		
+                  
+                    ";
+    }	
 	}else{
 		echo "no data";
 	}
-		
-
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -109,7 +111,7 @@ a{
 color:gray;	
 }
 #d{
-	 padding: 0px 50px;
+	 padding: 20px 30px;
  }
  .nav-link dropdown-toggle:hover .dropdown-menu {
    display: block;
@@ -134,7 +136,30 @@ color:gray;
 .star-rating > label:hover,
 .star-rating > label:hover ~ label,
 .star-rating > input[type="radio"]:checked ~ label
-{color: #f2b600}
+{
+  color: #f2b600
+}
+input[value="View"]
+{
+  margin-bottom:20px;
+}
+.a{
+  text-decoration:none;
+  color: #fff;
+  background: #e84c3d;
+  padding:5px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  border:none;
+  cursor: pointer;
+  width:20%;
+  border-radius: 10px
+ }
+ .a:hover{
+    background: #ff1802;
+    color: #fff;
+    text-decoration:none;
+ }
 </style>
 </head>
   <body style="background-color:#f3f3f3;">
@@ -153,7 +178,7 @@ color:gray;
          
 		 
 			<li class="nav-item">
-              <a class="nav-link" href="login.php"><i class="fas fa-user"></i> SIGN UP</a>
+              <a class="nav-link" href="index1.php"><i class="fas fa-user"></i> SIGN UP</a>
             </li>
 			<li class="nav-item">
               <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
@@ -164,18 +189,18 @@ color:gray;
     </nav>
 	
 
-	   
-	      <div class="container-fluid text-center" id="d">
+  <div class="container-fluid text-center" id="d">
           <div class="row">
-           <?
+           <?php
            echo $product;
            ?> 
           </div>
           </div>
-<br><br><br><br><br>
+
+
 <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
       </div>
       <!-- /.container -->
     </footer>

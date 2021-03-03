@@ -1,25 +1,20 @@
 <?php
 session_start();
-$output='';
-if (isset($_POST['search'])){
-mysql_connect ("localhost","root","","dbweb2")or die (mysql_error());
-mysql_select_db("dbweb2") or die (mysql_error());
+$output = '';
+ include 'connect.php';
+if (isset($_POST['search']))
+{
 
-$searchq= $_POST['search'];
-$searchq= preg_replace("#[^0-9a-z]#i",'',$searchq);
-$query=mysql_query("select * from product where productdescription LIKE '%$searchq%' OR color LIKE '%$searchq%'") or die("coul not search!");
-$count = mysql_num_rows($query);
-if ($count ==0){
-$output ="<script src='ser.js'></script>";
-echo $output;
-echo "<br><br><br><br><br>";
-echo "<center><h2><a class='er' href='index.php'>Go to Home</a></h2></center>";
-}else{
-echo $count;
-while($row = mysql_fetch_array($query)){
-$product=$product."
-			<div class='col-lg-4 col-md-6 mb-4'>
-			<form action='viewpro.php' method='post'>
+
+$searchq= preg_replace('#[^0-9a-z]#i','',$_POST['search']);
+$query = 'SELECT * FROM product WHERE productdescription LIKE "%$searchq%" OR color LIKE "%$searchq%"';
+
+if ($result = $conn->query($query)){
+  echo 'data selected';
+  while ($row = $result->fetch_row()){
+    $product=$product."
+      <div class='col-lg-4 col-md-6 mb-4'>
+      <form action='viewpro.php' method='post'>
               <div class='card h-100'>
                 <img src='".$row["image"]."' alt=''>
                 <div class='card-body'>
@@ -28,12 +23,12 @@ $product=$product."
                   </h4> 
                   <p class='card-text'>".$row["productdescription"]." </p>
                 </div>
-				<div>
-				<input type='text' name='id' value='".$row["id"]."' hidden>
+        <div>
+        <input type='text' name='id' value='".$row["id"]."' hidden>
                 <input type='submit' value='View'  class='btn btn-success'  >
-				</div>
+        </div>
                 <div class='card-footer'>
-		      <div id='star-rating'>
+          <div id='star-rating'>
     <input type='radio' name='example' class='rating' value='1' />
     <input type='radio' name='example' class='rating' value='2' />
     <input type='radio' name='example' class='rating' value='3' />
@@ -43,8 +38,11 @@ $product=$product."
                 </div>
               </div>
             </div>
-			</form>";
-}
+      </form>";
+  }
+  $result->close();
+}else{
+  echo 'no data';
 }
 }
 ?>

@@ -7,28 +7,19 @@ $color=$_POST["color"];
 $size=$_POST["size"];
 $price=$_POST["price"];
 $idusers=$_SESSION["iduser"];
-echo "the id is = ".$_POST["id"]."<br>";
-echo "the id is = ".$_POST["image"]."<br>";
-echo "the id is = ".$_POST["productdescription"]."<br>";
-echo "the id is = ".$_POST["color"]."<br>";
-echo "the id is = ".$_POST["size"]."<br>";
-echo "the id is = ".$_POST["price"]."<br>";
-echo "the id is = ".$_SESSION["iduser"]."<br>";
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn->connect_error){
-die ("not connected".$conn->connect_error);
-}else{
-echo "<br>"."all good connected"."<br>";
+
+if (empty($_SESSION["iduser"]))
+  {
+  	$output ="<script > alert('You are not logged in, please log in. ');</script>";
+    echo $output;
+    echo '<script type="text/javascript"> window.open("index1.php","_self");</script>'; 
+  }
+include 'connect.php';
 $sql="INSERT INTO myproduct2( `userid`, `pid`, `price`, `color`, `size`, `image`, `description`) VALUES('$idusers','$pid','$price','$color','$size','$image','$prod')";
 	if ($conn->query($sql) === TRUE) {
-echo "data intersted"."<br>";
+//echo "data intersted"."<br>";
 echo '<script type="text/javascript"> window.open("shop.php","_self");</script>'; 
 }else{
-echo "Error: " . $sql . "<br>" . $conn->error;
-}
-$conn->close();
+//echo "Error: " . $sql . "<br>" . $conn->error;
 }
 ?>
-<html>
-
-</html>

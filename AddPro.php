@@ -1,10 +1,6 @@
 <?php
 session_start();
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn->connect_error){
-die("not connected".$conn->connect_error);
-}else{
-//echo "connected";
+include "connect.php";
 $sql="SELECT * FROM productcat";
 $result=$conn->query($sql);
 if($result->num_rows>0){
@@ -19,8 +15,7 @@ while($row=$result->fetch_assoc()){
 else{
 	//echo "error";
 }
-$conn->close;
-}
+
 
 $sql1="SELECT * FROM dept";
 $result=$conn->query($sql1);
@@ -36,7 +31,6 @@ while($row=$result->fetch_assoc()){
 else{
 	//echo "error";
 }
-$conn->close;
 
 $sql="SELECT * FROM store";
 $result=$conn->query($sql);
@@ -52,9 +46,15 @@ while($row=$result->fetch_assoc()){
 else{
 	//echo "error";
 }
-$conn->close;
-session_start();
-$target_file = "uploads/" . basename($_FILES["fileToUpload"]["name"]);
+$target_file = '';
+$name_file = '';
+$size = '';
+if(isset($_POST['submit'])){
+        $name_file = $_FILES['fileToUpload']["name"];
+        $nametmp = $_FILES['fileToUpload']["tmp_name"];
+        $size = $_FILES["fileToUpload"]["size"];  
+}
+$target_file = "uploads/" . basename($name_file);
 $uploadOk = 1;
 $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 // Check if image file is a actual image or fake image
@@ -82,7 +82,7 @@ if (file_exists($target_file)) {
 }
 
 // Check file size
-if ($_FILES["fileToUpload"]["size"] > 500000) {
+if ($size > 500000) {
     //echo "<h3>"."Sorry, your file is too large."."</h3>";
     $uploadOk = 0;
 }
@@ -98,44 +98,59 @@ if ($uploadOk == 0) {
     //echo "<h3>"."Sorry, your file was not uploaded."."</h3>";
 // if everything is ok, try to upload file
 } else {
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    if (move_uploaded_file($nametmp, $target_file)) {
         //echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-		$NameFi= "uploads/".basename( $_FILES["fileToUpload"]["name"]);
+		$NameFi= "uploads/".basename($name_file);
 		
 		//echo " the file name = ".$NameFi;
-		
-		$price=$_POST["price"];
-        $color=$_POST["color"];
-	    $size=$_POST["size"];
-		$length=$_POST["length"];
-        $Desc=$_POST["description"];
-        $catid=$_POST["productcat"];
-		$selid=$_POST["productcat1"];
-		$storeid=$_POST["productcat2"];
-        $conn=new mysqli("localhost","root","","dbweb2");
-         if($conn->connect_error){
-	
-        die ("not connect" .$conn->connect_error);	
-}
-
-else{
-	//echo"connect"."<br>";
-	$sql="INSERT INTO product (Price, color, size, image, productdescription, Catid, selid,	storeid) VALUES ('$price', '$color', '$size', '$NameFi', '$Desc', '$catid', '$selid','$storeid')";
-	
-	if($conn->query($sql)===TRUE){	
-	header('location: fe.php');
-	}else{
-	$output ="<script >  alert('Your goods have not been included, please try again ');</script>";
-	echo $output;
-	}
-}
-
-		$conn->close();
-    } else {
-        //echo "<h3>"."Sorry, there was an error uploading your file."."</h3>"."<br>";
+    if(isset( $_POST["productCode"]))
+    {
+      $productCode = $_POST["productCode"];
     }
-}
+    if(isset( $_POST["price"]))
+    {
+      $price=$_POST["price"];
+    }
+    if(isset( $_POST["color"]))
+    {
+      $color=$_POST["color"];
+    }
+    if(isset( $_POST["size"]))
+    {
+      $size=$_POST["size"];
+    }
+    if(isset( $_POST["description"]))
+    {
+      $Desc=$_POST["description"];;
+    }
+    if(isset( $_POST["productcat"]))
+    {
+      $catid=$_POST["productcat"];
+    }
+    if(isset( $_POST["productcat1"]))
+    {
+      $selid=$_POST["productcat1"];
+    }
+    if(isset( $_POST["productcat2"]))
+    {
+      $storeid=$_POST["productcat2"];
+    }
+        
+	$sql="INSERT INTO `product` (Price, color, size, image, productdescription, catid, selid,	storeid, ProductCode) VALUES 
+  ('$price', '$color', '$size', '$NameFi', '$Desc', '$catid', '$selid','$storeid', '$productCode')";
+	
+	if($conn->query($sql)===TRUE)
+  {	
+	  header('location: fe.php');
+	}else{
+	  $output ="<script >  alert('Your goods have not been included, please try again ');</script>";
+	  echo $output;
+	}
+    } else {
+      //echo "<h3>"."Sorry, there was an error uploading your file."."</h3>"."<br>";
+    }
 
+}
 ?>
 
 
@@ -150,7 +165,7 @@ else{
   <meta name="author" content="">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>  
-  <title>Add Product</title>
+  <title>YOUR TOUCH</title>
 
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -160,6 +175,10 @@ else{
   <link href="css/shop-homepage.css" rel="stylesheet">
     
 <style>
+  body{
+  background-color:#f3f3f3;
+  margin-top: 40px;
+}
 .dropbtn {
   background-color: #e84c3d;
   color: white;
@@ -194,9 +213,6 @@ else{
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {background-color: #ff1802;}
-body{
-	background-color:#f3f3f3;
-}
 .form-group input[type="submit"]{
 	background:#e84c3d;	
 border:none;
@@ -204,19 +220,20 @@ color:#fff;
 padding:8px 40px;
 font-size:20px;
 margin:30px 0px;
+font-weight: bold
 }
 
 .form-group input[type="submit"]:hover{
 	background: #ff1802;
     color: #fff;
-	cursor:pointer;
-
-	
+	cursor:pointer
 }
 .navbar-brand span{
-	color:red;
+	color:red
 }
-
+.form-group input[type="text"]{
+  margin-bottom: 30px
+}
 </style>
 </head>
 
@@ -225,22 +242,14 @@ margin:30px 0px;
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="index.php">YourTouch</a>
+      <a class="navbar-brand" href="index.php">YOUR TOUCH</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="index.php">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
           <li class="nav-item">
-            <a class="nav-link" href="par.html">About</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">Product</a>
+            <a class="nav-link" href="checkuser.php">OPTIONS</a>
           </li>
 		  <li class="nav-item">
               <a class="nav-link" href="logoutstore.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
@@ -252,43 +261,42 @@ margin:30px 0px;
 
   <!-- Page Content -->
   <div class="container">
-   <h2 style="color:black; font-size:35px" >Add Product Free:</h2>
+   <h2 style="color:gray; font-size:37px; text-align:center;" >Add Product</h2>
   <form action="AddPro.php" method="post" enctype="multipart/form-data">
   <div class="form-group">
-	<h3><?echo $select; ?></h3>
+	<h3><?php echo $select; ?></h3>
 	</div>
 
 	<div class="form-group">
-	<h3><? echo $select1; ?></h3>
-  </div>
-  <div class="form-group">
-	<h3><? echo $select2; ?></h3>
+	<h3><?php echo $select1; ?></h3>
   </div>
 
-	  
+  <div class="form-group">
+	<h3><?php echo $select2; ?></h3>
+  </div>
+
 	<div class="form-group">
-		  <label> <p style="color:black; font-size:20px" ><b>Price:</b></p></label>
-      <input type="text" class="form-control" name="price" required>
+      <input type="text" class="form-control" name="price" placeholder="Price" required>
     </div>
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b>Color:</b></p></label>
-      <input type="text" class="form-control"  name="color" required >
+      <input type="text" class="form-control"  name="color" placeholder="Color" required >
     </div>
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b>Size:</b></p></label>
-      <input type="text" class="form-control"  name="size" required >
+      <input type="text" class="form-control"  name="size" placeholder="Size" required >
     </div>
     <div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b> Select image to Upload:</b></p></label>
+      <input type="text" class="form-control" name="description" placeholder="Product Description" required>
+    </div>
+    <div class="form-group">
+      <input type="text" class="form-control" name="productCode" placeholder="Product Code" required>
+    </div>
+    <div class="form-group">
+	 <label> <p style="color:gray; font-size:20px" ><b> Select image to Upload:</b></p></label>
 	<br>
     <input type="file" name="fileToUpload" id="fileToUpload" >
 	</div>
-	<div class="form-group">
-	  <label> <p style="color:black; font-size:20px" ><b>Product Description:</b></p></label>
-      <input type="text" class="form-control" name="description" required>
-    </div>
 	<div class="form-group"><center>
-		<input type="submit" value="Add" name="submit" >
+		<input type="submit" value="ADD" name="submit" >
     </div>
   </form>
   
@@ -299,7 +307,7 @@ margin:30px 0px;
   <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+      <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
     </div>
     <!-- /.container -->
   </footer>

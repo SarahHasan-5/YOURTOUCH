@@ -1,43 +1,40 @@
 <?php
 session_start();
-$pid=$_POST["id"];
+if (isset($_POST["pid"])){
+  $pid=$_POST["pid"];
+}
 $idusers=$_SESSION["iduser"];
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn->connect_error){
-	die("not connected".$conn->connect_error);
-}else{
-	//echo "connected"."<br>";
-	$product="<table style='width:100%'><thead>
+include 'connect.php';
+	$product="<table style='width:100%'>
 	<tr> 
 	<th>Product</th>
     <th>Description</th>	
-	<th>Description</th>
+	<th>Size</th>
 	<th>Unit price</th>
 	<th></th>
-	</tr></thead>";
+	</tr>";
 	$sql="SELECT * FROM myproduct2 WHERE userid='$idusers'";
-	$sql1="SELECT * FROM product";
 	$result=$conn->query($sql);
 	if($result->num_rows>0){
 		//echo "data selected";
 		while($row=$result->fetch_assoc()){
-			 $product=$product."<tr> 
+			 $product=$product."<form action='delete.php' method='post' ><input type='text' value='".$row["pid"]."' name='id' hidden>
+			 <tr> 
                   <td> <img src=".$row["image"]." style='height:150px; width:130px' alt=''>	</td>			  
 				 <td> ".$row["description"]."</td>		  
-				 <td> ".$row["color"]."
-				  ".$row["size"]."</td>
+				 <td>".$row["size"]."</td>
 				 <td> ".$row["price"]."	</td>	
-				 <form action='delete.php' method='post' ><td><input type='text' value='".$row["pid"]."' name='id' hidden><input type='submit' value='delete' style='background:#e84c3d; border:none; color:#fff; padding:8px 40px;cursor:pointer; font-size:20px;margin:30px 0px;'></td> </form>
+				 <td><input type='submit' value='delete' name='submit' style='background:#e84c3d; border:none; color:#fff; padding:8px 40px;cursor:pointer; font-size:20px;margin:30px 0px;'></td> </form>
                   </tr>";
 				  
 			
 		}
 		$product=$product."</table>";
+		
 	}else{
 		//echo "no data";
 	}
-	}
-	
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,46 +50,47 @@ if($conn->connect_error){
 
 
 	
-    <title>Your Touch </title>
+    <title>YOUR TOUCH</title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="css/shop-homepage.css" rel="stylesheet">
 		<style>
-		body {font-family: Arial, Helvetica, sans-serif; 
-		background-color:#f5f5dc";
-		}
-*{
-  box-sizing: border-box;
+body {
+	font-family: Arial, Helvetica, sans-serif; 
+	background-color:#f5f5dc;
+	margin-top: 50px;
 }
-.group {
-	 float: right;
-}
-
-.group #oi{
+.oi{
 	background:#e84c3d;	
-color:#fff;
-padding:8px 40px;
-font-size:20px;
-margin:30px 0px;
-position:static;
-
+	color:#fff;
+	padding:8px 40px;
+	font-size:20px;
+	margin:60px 0px
 }
-.group #oi:hover{
+.oi:hover{
 	background: #ff1802;
     color: #fff;
 	cursor:pointer;
 	text-decoration:none;
-	
+}
+.k {
+	float:right;
+	margin-left:773px
 }
 table{
 	border:1px solid gray;
+	text-align: center;
 }
 td {
 padding:20px;	
 }
 th{	
 	padding:30px;
+}
+footer
+{
+	margin-top: 30px
 }
 		</style>
 </head>
@@ -102,18 +100,15 @@ th{
  <!-- Navigation -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="index.php">Your touch</a>
+        <a class="navbar-brand" href="index.php">YOUR TOUCH</a>
 		<a class="nav-link h" href="shop.php"><i class="fas fa-shopping-cart" style="font-size:24px; color:white;"></i></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="index.php">SERVICES</a>
-            </li>
 			<li class="nav-item">
-              <a class="nav-link" href="login.php"><i class="fas fa-user"></i> SIGN UP</a>
+              <a class="nav-link" href="index1.php"><i class="fas fa-user"></i> SIGN UP</a>
             </li>
 			<li class="nav-item">
               <a class="nav-link" href="logout.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
@@ -123,26 +118,28 @@ th{
       </div>
     </nav>
 
-<br><br>
-<div class="container">
-            <div class="row">
-           <? echo $product; ?>
-           </div>
-        </div>
+
+        <div class="container">
+     <?php 
+   echo $product;
+   ?>
+  </div>
 		
 		<div class="container">
             <div class="row">
-		<div class="group"><br><center>
-		<a href="check.php" id="oi" style="text-align:right"> Check out</a><br>
-		<div class="group h"><br><center>
-		<a href="index.php" id="oi" style="text-align:right"> Go Shopping</a>
-      		
-    </div>
-	</div>
+		<a href="check.php" class="oi"> Check out</a>
+		<a href="index.php" class="oi k"> Go Shopping</a>
+	       </div>
         </div>
-		
-</div>
-<br><br><br><br><br>
+
+
+
+<footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
 
 
     <!-- Bootstrap core JavaScript -->

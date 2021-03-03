@@ -1,6 +1,6 @@
 <?php
 session_start();
-if($_POST['submit']) {
+if(isset($_POST['submit']) ){
 $username = strip_tags($_POST['email']);
 $password = strip_tags($_POST['password']);
 
@@ -18,7 +18,7 @@ if($username == $dbUserName && $password == $dbPassword) {
      $_SESSION['iduser'] = $userId;
 	 echo '<script> window.open("checkuser.php","_self");</script>'; 
 }else {
-echo "<b><i>Incorrect login</i></b>";
+    echo "<script>alert('The password you’ve entered is incorrect');</script>"; 
 }
 }
 ?>
@@ -37,28 +37,51 @@ echo "<b><i>Incorrect login</i></b>";
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" integrity="sha384-gfdkjb5BdAXd+lj+gudLWI+BXq4IuLW5IT+brZEZsLFm++aCMlF1V92rMkPaX4PP" crossorigin="anonymous">
 
 
-    <title>Your Touch </title>
+    <title>YOUR TOUCH</title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="css/shop-homepage.css" rel="stylesheet">
 	<style>
-	.form-group input[type="submit"]{
-	background:#e84c3d;	
-border:none;
-color:#fff;
-padding:8px 40px;
-font-size:20px;
-margin:30px 0px;
+    body
+    {
+      padding-top:100px;
+    }
+.inpu {
+  display: flex;
+  width: 100%;
+  margin-bottom: 15px;
+  border :5px solid white;
+}
+
+p{
+color:#9a7e6c;
+}
+.icon {
+  padding: 17px;
+  background: #c19e87;
+  color: white;
+  min-width: 50px;
+  text-align: center;
 }
 
 
-.form-group input[type="submit"]:hover{
-	background: #ff1802;
-    color: #fff;
-	cursor:pointer;
+.btn {
+  background-color: #c19e87;
+  color: white;
+  padding: 15px 15px;
+  border: none;
+  width: 100%;
+  opacity: 0.9;
+}
 
+.btn:hover {
+  opacity: 1;
+}
+footer {
+  margin-top: 115px ;
 	</style>
+}
 </head>
 
   <body style="background-color:#f3f3f3">
@@ -66,7 +89,7 @@ margin:30px 0px;
     <!-- Navigation -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="index.php">YourTouch</a>
+        <a class="navbar-brand" href="index.php">YOUR TOUCH</a>
 		
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -77,32 +100,34 @@ margin:30px 0px;
               <a class="nav-link" href="par.html">ABOUT</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="owners.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
+              <a class="nav-link" href="logoutstore.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
-	<div class="container">
-	<br>
-<form action="owners.php" method="post" enctype="multipart/form-data">
-	<div class="form-group">
-		  <label> <p style="color:black; font-size:20px" ><b> User name:</b></p></label>
-      <input type="text" class="form-control" name="email" required>
+
+  <div class="container-fluid">
+<form action="owners.php" method="post" enctype="multipart/form-data" style="max-width:500px;margin:auto">
+  <h2 class="text-center">Login</h2>
+  <div class="inpu">
+    <i class="fa fa-envelope icon"></i>
+    <input type="text"  placeholder="Please enter your email" name="email" class="form-control" style="height:50px; width:100%" required>
+  </div>
+  
+  <div class="inpu">
+    <i class="fa fa-key icon"></i>
+    <input type="password" placeholder="Please enter your Password" name="password" class="form-control" style="height:50px; width:100%"  required>
+  </div>
+    <input class="btn" type="submit" name="submit" value="LOG IN" onClick="display();"><br><br>
+  <div class="text-center">
+  <b><p> Dont have a Store? </b><a href="Addstore.php" style="color:gray">REGISTER HERE </a></p>
     </div>
-	<div class="form-group">
-		  <label> <p style="color:black; font-size:20px" ><b> Password:</b></p></label>
-      <input type="text" class="form-control" name="password" required>
-    </div>
-	<div class="form-group"><center>
-		<input type="submit" value="OK" name="submit" onClick="display();">
-    </div>
-	</div>
-	</form>
-	<br><br><br><br><br>
+</form>
+ </div>
 	 <footer class="py-5 bg-dark">
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+      <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
     </div>
     <!-- /.container -->
   </footer>

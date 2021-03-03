@@ -3,24 +3,17 @@ session_start();
 $idusers=$_SESSION["iduser"];
 //echo "the id is = ".$_SESSION["iduser"]."<br>";
 //echo "the UserName is = ".$_SESSION["user"]."<br>";
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn->connect_error){
-	die("not connect".$conn->connect_error);
-}else{
-	//echo "connect"."<br>";
-	echo "<br>";
+include 'connect.php';
 	$sql="SELECT * FROM store WHERE id='$idusers'";
 	$result=$conn->query($sql);
 	if($result->num_rows>0){
 		//echo "data selected"."<br>";
 		while($row=$result->fetch_assoc()){
-			   echo "<br>"."<br>"."<br>"."<center>"."<h3 >"."<i class='fas fa-store'>"."    "."Welcome , ".$row['storename']."</i>"."</h3>";
-              
+      $name =  "Hi , " . $row['storename']; 
 	
 		}
 	}else{
 		//echo "no data";
-	}
 	}
 ?>
 <!DOCTYPE html>
@@ -37,57 +30,53 @@ if($conn->connect_error){
 
 
 	
-    <title>Your Touch </title>
+    <title>YOUR TOUCH </title>
     <!-- Bootstrap core CSS -->
     <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="css/shop-homepage.css" rel="stylesheet">
-<html>
-<title>check</title>
 <head>
 <style>
- h3{
-	background:#fff;
-    width:300px;
-	height:100px;
-    margin:5px 120px;
-	padding:10px;
-	border:1px solid gray;
-	
+  body {
+    background-color: #f3f3f3; 
+    text-align: center;
   }
-  h2{
-	 
-	   width:200px;
-	   height:50px;
-	   float:left;
-	   margin-right:230px; 
-	   margin-top:70px;
-	  
+  .name {
+    background-color: #fff;
+    padding:0px 5px;
   }
-  .w{
-	  margin-left:0px;
-	  margin-right:10px;
-	  
+  .values {
+    padding-top:17px;
   }
-  .a{
-  text-decoration:none;
-  color: #fff;
-  background: #e84c3d;
-  padding:10px 10px;
-  letter-spacing:1px;
- }
- .a:hover{
-	background: #ff1802;
+ .values h2{
+    margin: 20px auto;
+  }
+  .values h1 {
+    font-size: 35px;
+    color: gray;
+    padding-bottom: 30px;
+  }
+  a {
     color: #fff;
-	text-decoration:none;
+    text-decoration:none
+  }
+  .a {
+    background: #e84c3d;
+    padding:10px 40px;
+    letter-spacing:1px;
+    width:200px;
  }
- .d{
-    font-weight:bold;
-	font-size:20px;
-	padding:12px 40px;
- }	
- body{
-	background-color:#f3f3f3;
+  .a a:hover {
+	  background: #ff1802;
+    color: #fff;
+	  text-decoration:none;
+ }
+ .a:hover {
+    background: #ff1802;
+ }
+footer
+{
+  margin-top:110px;
 }
   </style>
   </head>
@@ -95,8 +84,9 @@ if($conn->connect_error){
   <!-- Navigation -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="index.php">Your touch</a>
-		<a class="nav-link h" href="shop.php"><i class="fas fa-shopping-cart" style="font-size:24px; color:white;"></i></a>
+        <a class="navbar-brand" href="index.php">YOUR TOUCH</a>
+		<a class="nav-link h"><i class='fas fa-store' style="font-size:24px; color:white;"></i></a>
+    <div class="name"><?php echo $name ?></div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -106,23 +96,23 @@ if($conn->connect_error){
               <a class="nav-link" href="index.php">SERVICES</a>
             </li>
 			<li class="nav-item">
-              <a class="nav-link" href="owners.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
+              <a class="nav-link" href="logoutstore.php"><i class="fas fa-sign-out-alt"></i>LOGOUT</a>
             </li>
           </ul>
         </div>
       </div>
     </nav>
 	<br><br>
-	<div class="container">
-   <h2><a href="AddPro.php" class="a c">Add</a> </h2>
-  <h2> <a href="del.php" class="a c">Delete</a></h2>
-  <h2 class="w"> <a href="update.php" class="a c">Update</a></h2>
+	<div class="container values">
+    <h1> Please select the operation you want to perform: </h1>
+  <h2 class="a"><a href="AddPro.php">ADD</a> </h2>
+  <h2 class="a"> <a href="del.php">DELETE</a></h2>
+  <h2 class="a w"> <a href="update.php">UPDATE</a></h2>
   </div>
-	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <!-- Footer -->
     <footer class="py-5 bg-dark">
       <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2019</p>
+        <p class="m-0 text-center text-white">Copyright &copy; Your Touch 2020</p>
       </div>
       <!-- /.container -->
     </footer>

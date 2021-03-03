@@ -1,38 +1,36 @@
 <?php
 session_start();
-$conn=new mysqli("localhost","root","","dbweb2");
-if($conn->connect_error){
-die("not connected".$conn->connect_error);
-}else{
-//echo "connected";
+include "connect.php";
 $sql="SELECT * FROM productcat";
 $result=$conn->query($sql);
-if($result->num_rows>0){
+if($result->num_rows>0) {
 	//echo"selected";
 	$select="<select name='productcat3'>";
-while($row=$result->fetch_assoc()){
+  while($row=$result->fetch_assoc()){
 		$select=$select."<option value=".$row['id']." > ".$row['catname']."</option>";
 	}
 	$select=$select."</select>";
 }
-
 else{
 	echo "error";
 }
-$conn->close;
+$target_file = '';
+$name_file = '';
+if(isset($_POST['submit'])){
+        $name_file = $_FILES['fileToUpload']["name"];
+        $nametmp = $_FILES['fileToUpload']["tmp_name"];  
 }
-session_start();
-$target_file = "upload/" . basename($_FILES["fileToUpload"]["name"]);
+ $target_file = "upload/" . basename($name_file);
+ $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
 $uploadOk = 1;
-$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 // Check if image file is a actual image or fake image
 if(isset($_POST["submit"])) {
-    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+    $check = getimagesize($nametmp);
     if($check !== false) {
-		
 	    //echo "<center>"."<h3>"."The file was downloaded successfully"."</h3>"."<br>";	
-       // echo "File is an image - " . $check["mime"] . ".";
-        $uploadOk = 1;
+      // echo "File is an image - " . $check["mime"] . ".";
+      $uploadOk = 1;
     } else {
 		echo "<br>"."<br>";
        // echo "<h3>"."File is not an image."."</h3>";
@@ -59,38 +57,28 @@ if ($uploadOk == 0) {
     //echo "<h3>"."Sorry, your file was not uploaded."."</h3>";
 // if everything is ok, try to upload file
 } else {
-    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    if (move_uploaded_file($nametmp, $target_file)) {
         //echo "The file ". basename( $_FILES["fileToUpload"]["name"]). " has been uploaded.";
-		$NameFi= "upload/".basename( $_FILES["fileToUpload"]["name"]);
+		$NameFi= "upload/".basename($name_file);
 		
 		//echo " the file name = ".$NameFi;
 		
 		$store=$_POST["NameStore"];
-	    $desc=$_POST["DescriptionStore"];
+	  $desc=$_POST["DescriptionStore"];
 		$email=$_POST["email"];
-        $name=$_POST["name"];
+    $name=$_POST["name"];
 		$catid=$_POST["productcat3"];
 		$address=$_POST["add"];
 		$pass=$_POST["password"];
 		$phone=$_POST["phone"];
-        $conn=new mysqli("localhost","root","11111111","dbweb2");
-         if($conn->connect_error){
-	
-        die ("not connect" .$conn->connect_error);	
-}
 
-else{
-	//echo "connect"."<br>";
-	$sql="INSERT INTO store (storename, storedescription, Email, username, piclnk, catid,password,address,phone) VALUES('$store', '$desc', '$email', '$name', '$NameFi', '$catid','$pass','$address','$phone')";
+	$sql="INSERT INTO store (storename, storedescription, Email, username, piclnk, catid,password,address,phone) VALUES ('$store', '$desc', '$email', '$name', '$NameFi', '$catid','$pass','$address','$phone')";
 	if($conn->multi_query($sql)== true){
 	header('location: fo.php');
 	}else{
 	$output ="<script >  alert('Your store has not been opened, please try again ');</script>";
 	echo $output;
 	}
-}
-
-		$conn->close();
     } else {	echo "<br>";
         //echo "<h3>"."Sorry, there was an error uploading your file."."</h3>"."<br>";
     }
@@ -131,14 +119,10 @@ padding:8px 40px;
 font-size:20px;
 margin:30px 0px;
 }
-
-
 .form-group input[type="submit"]:hover{
 	background: #ff1802;
     color: #fff;
 	cursor:pointer;
-
-	
 }
 .navbar-brand span{
 	color:red;
@@ -179,50 +163,41 @@ margin:30px 0px;
      <div class="container">
 <form action="Addstore.php" method="post" enctype="multipart/form-data">
 	<div class="form-group">
-		  <label> <p style="color:black; font-size:20px" ><b> Store Name:</b></p></label>
-      <input type="text" class="form-control" name="NameStore" required>
-    </div>
+		<label> <p style="color:black; font-size:20px" ><b> Store Name:</b></p></label>
+    <input type="text" class="form-control" name="NameStore" required>
+  </div>
 	<div class="form-group">
-	<? echo $select;?>
+	<?php echo $select;  ?>
 	</div>
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b> Store Description:</b></p></label>
-      <input type="text" class="form-control"  name="DescriptionStore" required>
-    </div>
-
+	  <label> <p style="color:black; font-size:20px" ><b> Store Description:</b></p></label>
+    <input type="text" class="form-control"  name="DescriptionStore" required>
+  </div>
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b>contact information:</b></p></label>
-      <input type="text" class="form-control"  name="name" placeholder=" User Name" required>
-    </div>	
-	
+	  <label> <p style="color:black; font-size:20px" ><b>contact information:</b></p></label>
+    <input type="text" class="form-control"  name="name" placeholder=" User Name" required>
+  </div>	
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b></b></p></label>
-      <input type="text" class="form-control"  name="password" placeholder="Password" required>
-    </div>
+    <input type="text" class="form-control"  name="password" placeholder="Password" required>
+  </div>
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b></b></p></label>
-      <input type="text" class="form-control"  name="email" placeholder="Email" required>
-    </div>
+    <input type="text" class="form-control"  name="email" placeholder="Email" required>
+  </div>
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b></b></p></label>
-      <input type="text" class="form-control"  name="add" placeholder="Address" required>
-    </div>
+    <input type="text" class="form-control"  name="add" placeholder="Address" required>
+  </div>
 	<div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b></b></p></label>
-      <input type="text" class="form-control"  name="phone" placeholder="Phone" required>
-    </div>
-	
-	
-	
-     <div class="form-group">
-	 <label> <p style="color:black; font-size:20px" ><b> Select image to Upload:</b></p></label>
-	<br>
+    <input type="text" class="form-control"  name="phone" placeholder="Phone" required>
+  </div>
+  <div class="form-group">
+	  <label> <p style="color:black; font-size:20px" ><b> Select image to Upload:</b></p></label>
+	  <br>
     <input type="file" name="fileToUpload" id="fileToUpload" >
 	</div>
 	<div class="form-group"><center>
 		<input type="submit" value="SAVE" name="submit">
-    </div>
-  </form>
+  </div>
+</form>
   
   </div>
   <!-- /.container -->
